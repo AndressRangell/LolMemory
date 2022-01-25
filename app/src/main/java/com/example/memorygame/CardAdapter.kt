@@ -5,9 +5,13 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.memorygame.databinding.ItemCardBinding
+import com.example.memorygame.model.BoardSize
 import kotlin.math.min
 
-class CardAdapter(private val context: Context, private val numberPieces: Int) :
+class CardAdapter(
+    private val context: Context,
+    private val boardSize: BoardSize,
+    private val cardImages: List<Int>) :
     RecyclerView.Adapter<CardAdapter.ViewHolder>() {
 
     private lateinit var binding: ItemCardBinding
@@ -18,8 +22,8 @@ class CardAdapter(private val context: Context, private val numberPieces: Int) :
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         binding = ItemCardBinding.inflate(LayoutInflater.from(context), parent, false)
-        val cardWidth = parent.width / 3 - (2 * MARGIN_SIZE)
-        val cardHeight = parent.height / 4 - (2 * MARGIN_SIZE)
+        val cardWidth = parent.width / boardSize.getWidth() - (2 * MARGIN_SIZE)
+        val cardHeight = parent.height / boardSize.getHeight() - (2 * MARGIN_SIZE)
         val cardSideLength = min(cardWidth, cardHeight)
         val layout = binding.cvItem.layoutParams as ViewGroup.MarginLayoutParams
         layout.width = cardSideLength
@@ -32,10 +36,11 @@ class CardAdapter(private val context: Context, private val numberPieces: Int) :
         holder.bind(position)
     }
 
-    override fun getItemCount(): Int = numberPieces
+    override fun getItemCount(): Int = boardSize.numCards
 
     inner class ViewHolder(binding: ItemCardBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(position: Int) {
+            binding.ibCard.setImageResource(cardImages[position])
             binding.ibCard.setOnClickListener {
                 println("Clicked on position $position")
             }
