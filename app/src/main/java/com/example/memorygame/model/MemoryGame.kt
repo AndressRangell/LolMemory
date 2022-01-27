@@ -7,6 +7,7 @@ class MemoryGame(
 ) {
 
     private var indexOfSingleSelectedCard: Int? = null
+    private var numCardFlips = 0
     val cards: List<Card>
     var numPairsFound = 0
 
@@ -17,6 +18,7 @@ class MemoryGame(
     }
 
     fun flipCard(position: Int): Boolean {
+        numCardFlips++
         val card = cards[position]
         var foundMatch = false
         if(indexOfSingleSelectedCard == null){
@@ -49,4 +51,6 @@ class MemoryGame(
     fun haveWonGame(): Boolean = numPairsFound == boardSize.getNumPairs()
 
     fun isCardFaceUp(position: Int): Boolean = cards[position].isFaceUp
+
+    fun getNumMoves(): Int = numCardFlips
 }

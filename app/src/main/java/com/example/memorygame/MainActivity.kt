@@ -16,7 +16,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private lateinit var memoryGame: MemoryGame
     private lateinit var adapter: CardAdapter
-    private var boardSize: BoardSize = BoardSize.HARD
+    private var boardSize: BoardSize = BoardSize.EASY
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,19 +37,22 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-    @SuppressLint("NotifyDataSetChanged")
     private fun updateGameWithFlip(position: Int){
         if(memoryGame.haveWonGame()){
-            Toast.makeText(this, "Juego finalizado", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "You already won!", Toast.LENGTH_SHORT).show()
             return
         }
         if(memoryGame.isCardFaceUp(position)){
-            Toast.makeText(this, "Movimiento no valido", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "Invalid move!", Toast.LENGTH_SHORT).show()
             return
         }
         if(memoryGame.flipCard(position)){
-            Toast.makeText(this, "Par encontrado", Toast.LENGTH_SHORT).show()
+            binding.tvPairs.text = "Pairs: ${memoryGame.numPairsFound} / ${boardSize.getNumPairs()}"
+            if(memoryGame.haveWonGame()){
+                Toast.makeText(this, "You won! Congratulations.", Toast.LENGTH_SHORT).show()
+            }
         }
+        binding.tvMoves.text = "Moves: ${memoryGame.getNumMoves()}"
         adapter.notifyDataSetChanged()
     }
 }
